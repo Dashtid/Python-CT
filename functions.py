@@ -149,6 +149,17 @@ def apply_transf(im_ref, im_mov, trafo, show_parameters=False):
 # segmented_array : The segmentation as an array [numpy.ndarray]
 
 def seg_atlas(common_img, ct_list, seg_list):
+    """
+    Perform atlas-based segmentation on the reference image using provided CT and mask lists.
+
+    Args:
+        reference_img: SimpleITK.Image, the reference image to segment.
+        ct_list: list of SimpleITK.Image, moving images.
+        mask_list: list of SimpleITK.Image, corresponding masks for moving images.
+
+    Returns:
+        np.ndarray: Segmentation result as a numpy array.
+    """
     # Creating the necessary lists
     seg = []
     image_list = []
@@ -222,6 +233,16 @@ def seg_atlas(common_img, ct_list, seg_list):
 # None
 
 def distances(mask_img, seg_img):
+    """
+    Compute similarity metrics between mask and segmentation.
+
+    Args:
+        mask_img: SimpleITK.Image, ground truth mask.
+        seg_img: SimpleITK.Image, predicted segmentation.
+
+    Returns:
+        dict: Dictionary of similarity metrics.
+    """
     # Creating the necessary filters
     hausdorff = sitk.HausdorffDistanceImageFilter()
     overlap = sitk.LabelOverlapMeasuresImageFilter()
@@ -264,6 +285,16 @@ def distances(mask_img, seg_img):
 # trained_forest : Trained random forest classifier [sklearn.ensemble.forest.RandomForestClassifier]
 
 def train_classifier(slice_list, vector_list):
+    """
+    Train a random forest classifier to predict slice labels.
+
+    Args:
+        ct_list: list of SimpleITK.Image, CT images.
+        vector_list: list of np.ndarray, label vectors for each CT.
+
+    Returns:
+        trained_model: Trained classifier.
+    """
     # Creating necessary list
     x_train_list = []
 
@@ -309,6 +340,16 @@ def train_classifier(slice_list, vector_list):
 # None
 
 def slice_probability(ct_image, classifier):
+    """
+    Predict the probability of each slice containing the pubic symphysis.
+
+    Args:
+        reference_img: SimpleITK.Image, the reference image.
+        trained_tree: trained classifier.
+
+    Returns:
+        np.ndarray: Probability scores for each slice.
+    """
     # Creating necessary lists
     test_list = []
     max_list = []
